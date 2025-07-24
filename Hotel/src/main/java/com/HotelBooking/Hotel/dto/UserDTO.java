@@ -1,11 +1,10 @@
 package com.HotelBooking.Hotel.dto;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
