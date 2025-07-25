@@ -12,7 +12,7 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RoomDTO {
     private Long id;
-    private String roomtype;
+    private String roomType;
     private BigDecimal roomPrice;
     private String roomPhotoURL;
     private String description;
