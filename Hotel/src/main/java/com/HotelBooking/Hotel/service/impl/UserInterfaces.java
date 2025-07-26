@@ -1,5 +1,7 @@
 package com.HotelBooking.Hotel.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,7 +17,6 @@ import com.HotelBooking.Hotel.repo.UserRepository;
 import com.HotelBooking.Hotel.service.interfac.IUserInterface;
 import com.HotelBooking.Hotel.util.JWTUtils;
 import com.HotelBooking.Hotel.util.Utils;
-import com.amazonaws.services.s3.model.S3DataSource;
 
 @Service
 public class UserInterfaces implements IUserInterface{
@@ -34,32 +35,117 @@ public class UserInterfaces implements IUserInterface{
 
     @Override
     public Response deleteUser(String userId) {
-        // TODO Auto-generated method stub
-        return null;
+        Response response = new Response();
+
+        try {
+            userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new CustomiseException("User not Found!"));
+            userRepository.deleteById(Long.valueOf(userId));
+            
+            response.setStatusCode(200);
+            response.setMessage("Deleting a user Successfully ");
+            
+        }catch(CustomiseException e){
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+        } catch (Exception e) {
+             response.setStatusCode(400);
+            response.setMessage("Error on deleting a user :" + e.getMessage());
+        }
+
+        return response;
     }
 
     @Override
     public Response getAllUsers() {
-        // TODO Auto-generated method stub
-        return null;
+        Response response = new Response();
+
+        try {
+            List<User> userList = userRepository.findAll();
+            List<UserDTO> userDTOList = Utils.mapUserEntityToUserListDTO(userList);
+
+            response.setUserList(userDTOList);
+
+            response.setStatusCode(200);
+            response.setMessage("Getting User details Successfully ");
+            
+        }catch(CustomiseException e){
+            response.setStatusCode(500);
+            response.setMessage(e.getMessage());
+        } catch (Exception e) {
+             response.setStatusCode(400);
+            response.setMessage("Error on register: :" + e.getMessage());
+        }
+
+        return response;
     }
 
     @Override
     public Response getMyInfo(String email) {
-        // TODO Auto-generated method stub
-        return null;
+        Response response = new Response();
+
+        try {
+            User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomiseException("User not Found!"));
+            UserDTO userDTO = Utils.mapUserEntityToUserDTO(user);
+            
+            response.setUser(userDTO);
+            response.setStatusCode(200);
+            response.setMessage("Getting my UserInfo Successfully ");
+            
+        }catch(CustomiseException e){
+            response.setStatusCode(500);
+            response.setMessage(e.getMessage());
+        } catch (Exception e) {
+             response.setStatusCode(400);
+            response.setMessage("Error on getting myInfo :" + e.getMessage());
+        }
+
+        return response;
     }
 
     @Override
     public Response getUserBookingHistory(String userId) {
-        // TODO Auto-generated method stub
-        return null;
+        Response response = new Response();
+
+        try {
+            User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new CustomiseException("User not Found!"));
+            UserDTO userDTO = Utils.mapUserEntityToUserDTOUserBookingAndRooms(user);
+
+            response.setUser(userDTO);
+            response.setStatusCode(200);
+            response.setMessage("Getting booking details Successfully ");
+            
+        }catch(CustomiseException e){
+            response.setStatusCode(500);
+            response.setMessage(e.getMessage());
+        } catch (Exception e) {
+             response.setStatusCode(400);
+            response.setMessage("Error on getting all user :" + e.getMessage());
+        }
+
+        return response;
     }
 
     @Override
     public Response getUserById(String userId) {
-        // TODO Auto-generated method stub
-        return null;
+        Response response = new Response();
+
+        try {
+            User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new CustomiseException("User not Found!"));
+            UserDTO userDTO = Utils.mapUserEntityToUserDTO(user);
+            response.setUser(userDTO);
+            
+            response.setStatusCode(200);
+            response.setMessage("Getting User detail Successfully ");
+            
+        }catch(CustomiseException e){
+            response.setStatusCode(500);
+            response.setMessage(e.getMessage());
+        } catch (Exception e) {
+             response.setStatusCode(400);
+            response.setMessage("Error on deleting a user :" + e.getMessage());
+        }
+
+        return response;
     }
 
     @Override
@@ -74,17 +160,18 @@ public class UserInterfaces implements IUserInterface{
             var user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new CustomiseException("User not Found"));
             var token = jwtutils.generateToken(user);
             response.setToken(token);
-            
-
+            response.setExpirationTime("7 days");
+            response.setRole(user.getRole());
+            response.setMessage("SuccessFully loggedIn");
 
             response.setStatusCode(200);
             
         }catch(CustomiseException e){
-            response.setStatusCode(400);
+            response.setStatusCode(500);
             response.setMessage(e.getMessage());
         } catch (Exception e) {
              response.setStatusCode(400);
-            response.setMessage("Error : :" + e.getMessage());
+            response.setMessage("Error on Login: :" + e.getMessage());
         }
 
         return response;
@@ -106,13 +193,14 @@ public class UserInterfaces implements IUserInterface{
             UserDTO userDTO = Utils.mapUserEntityToUserDTO(savedUser);
 
             response.setStatusCode(200);
+            response.setMessage("Regsitered Successfully ");
             response.setUser(userDTO);
         }catch(CustomiseException e){
-            response.setStatusCode(400);
+            response.setStatusCode(500);
             response.setMessage(e.getMessage());
         } catch (Exception e) {
              response.setStatusCode(400);
-            response.setMessage("Error : :" + e.getMessage());
+            response.setMessage("Error on register: :" + e.getMessage());
         }
 
         return response;
