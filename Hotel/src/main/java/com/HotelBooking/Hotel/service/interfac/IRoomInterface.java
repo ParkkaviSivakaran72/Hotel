@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.HotelBooking.Hotel.dto.Response;
 
 public interface IRoomInterface {
-    Response addNewRoom(MultipartFile photo, String roomType,BigDecimal RoomPrice,String description);
+    Response addNewRoom(MultipartFile photo,MultipartFile file, String roomType,BigDecimal RoomPrice,String description);
 
     List<String> getAllRoomTypes();
 
@@ -17,7 +17,7 @@ public interface IRoomInterface {
 
     Response deleteRoom(Long roomId);
 
-    Response updateRoom(Long roomId, String description, String roomType, BigDecimal roomPrice, MultipartFile photo);
+    Response updateRoom(Long roomId, String description, String roomType, BigDecimal roomPrice, MultipartFile photo, MultipartFile file);
 
     Response getRoomById(Long roomId);
 
