@@ -43,6 +43,7 @@ public class RoomController {
             Response response = new Response();
             response.setStatusCode(400);
             response.setMessage("Please enter all fields");
+            return ResponseEntity.status(response.getStatusCode()).body(response);
             
         }
         Response response = roomService.addNewRoom(photo,file, roomType,roomPrice, description);

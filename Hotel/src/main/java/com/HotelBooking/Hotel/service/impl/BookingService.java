@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.HotelBooking.Hotel.dto.BookingDTO;
@@ -19,13 +20,12 @@ import com.HotelBooking.Hotel.repo.UserRepository;
 import com.HotelBooking.Hotel.service.interfac.IBookingService;
 import com.HotelBooking.Hotel.util.Utils;
 
+@Service
 public class BookingService implements IBookingService {
 
     @Autowired
     private BookingRepository bookingRepository;
 
-    @Autowired
-    private IBookingService roomServices;
 
     @Autowired
     private RoomRepository roomRepository;
