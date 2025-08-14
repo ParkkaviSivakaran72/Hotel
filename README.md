@@ -51,24 +51,11 @@ Users can search, view, and book hotel rooms, while admins manage listings and b
 
 ---
 
-## 🗂️ Folder Structure
+### Notes
+- **Frontend:** `components/` for reusable UI parts, `pages/` for route-level pages, `services/` for API calls and helper functions.  
+- **Backend:** `controller/` for endpoints, `service/` for business logic, `repository/` for database interactions, `model/` for entity classes, and `config/` for security/JWT setup.  
+- Keep **frontend and backend completely separate** for clarity and maintainability.
 
-**Frontend /client**  
-src/
-├── components/ # Navbar, Footer, RoomSearch, RoomResult
-├── pages/ # Home, Login, Profile, RoomDetails, AllRooms, Booking
-└── services/ # APIService, ProtectedRoute
-
-
-**Backend /server**  
-src/main/java/com/royalcrest/
-├── controller/ # REST Controllers
-├── service/ # Business logic
-├── repository/ # JPA Repositories
-├── model/ # Entities
-└── config/ # Security & JWT configuration
-
----
 
 ## 🔐 Token Management
 - Upon login, the JWT is stored securely in localStorage and automatically added to Authorization headers in all protected routes.
